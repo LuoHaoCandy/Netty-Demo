@@ -1,4 +1,4 @@
-package com.luohao;
+package com.luohao.客户端和服务端;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
