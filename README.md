@@ -14,3 +14,8 @@
    * 创建一个引导类,这里使用的是BootStrap.
    * 基本和服务端流程一直,略
 
+#### 三.客户端和服务端通信
+
+   * 通过在channelHandler的调用链里设置一个自定义的Handle来进行数据的读取和写入
+   * 关于ChannelHandler里的方法其实就是整个调用过程中ChannelHandler的生命周期,后续补充
+
