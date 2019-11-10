@@ -1,6 +1,8 @@
-package com.luohao.客户端和服务端通信;
+package com.luohao.客户端和服务端的协议编码;
 
+import com.luohao.客户端和服务端通信.ClientChannelHandler;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
@@ -8,12 +10,14 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * @author luohao
  * @date 2019/11/3
  */
 public class NettyClient {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
 
         Bootstrap bootstrap = new Bootstrap();
@@ -26,19 +30,26 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) {
+                        ch.pipeline().addLast(new Encodec());
+                        ch.pipeline().addLast(new Decodec());
+                        ch.pipeline().addLast(new ClientChannelHandler());
 
-                        ch.pipeline().addFirst(new ClientChannelHandler());
+
                     }
                 });
         // 4.建立连接
-        bootstrap.connect("127.0.0.1", 8000).addListener(new ChannelFutureListener() {
+        ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8000).addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
-                if(future.isSuccess()){
+                if (future.isSuccess()) {
                     System.out.println("连接已经建立");
                 }
             }
         });
+
+        channelFuture.channel().writeAndFlush(new Packet());
+
+
     }
 
 }

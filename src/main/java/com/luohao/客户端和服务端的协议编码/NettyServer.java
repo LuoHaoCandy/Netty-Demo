@@ -1,5 +1,6 @@
-package com.luohao.客户端和服务端通信;
+package com.luohao.客户端和服务端的协议编码;
 
+import com.luohao.客户端和服务端通信.ServerChannelHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -22,7 +23,10 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addFirst(new ServerChannelHandler());
+                        ch.pipeline().addLast(new Decodec());
+                        ch.pipeline().addLast(new ServerChannelHandler());
+
+
                     }
                 });
 

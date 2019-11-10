@@ -1,5 +1,7 @@
 package com.luohao.客户端和服务端通信;
 
+import com.luohao.客户端和服务端的协议编码.Encodec;
+import com.luohao.客户端和服务端的协议编码.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -15,14 +17,17 @@ public class ClientChannelHandler extends ChannelInboundHandlerAdapter {
 
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
+    public void channelActive(ChannelHandlerContext ctx)throws Exception {
         System.out.println(new Date() + ": 客户端写出数据");
 
         // 1. 获取数据
         ByteBuf buffer = getByteBuf(ctx);
 
+
+        Packet packet = new Packet();
+        packet.setClassName("123");
         // 2. 写数据
-        ctx.channel().writeAndFlush(buffer);
+        ctx.channel().writeAndFlush(packet);
     }
 
     private ByteBuf getByteBuf(ChannelHandlerContext ctx) {

@@ -1,5 +1,6 @@
 package com.luohao.客户端和服务端通信;
 
+import com.luohao.客户端和服务端的协议编码.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
@@ -18,9 +19,14 @@ public class ServerChannelHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ByteBuf byteBuf = (ByteBuf) msg;
 
-        System.out.println(new Date() + ": 服务端读到数据 -> " + byteBuf.toString(Charset.forName("utf-8")));
+
+        Packet packet=(Packet)msg;
+        System.out.println(packet.getClassName());
+
+
+
+        System.out.println(new Date() + ": 服务端读到数据 -> " + packet.getClassName());
 
 
         // 1. 获取数据
